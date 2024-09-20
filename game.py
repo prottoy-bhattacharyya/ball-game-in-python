@@ -7,9 +7,9 @@ screen_width = disp_info.current_w
 screen_height = disp_info.current_h
 screen = pygame.display.set_mode((screen_width, screen_height))
 
-pygame.display.set_caption("Pong")
+# pygame.display.set_caption("Pong")
 
-color =(52,86,48)
+bg_color =(52,86,48)
 white = (255, 255, 255)
 paddle_width = 10
 paddle_height = 200
@@ -50,27 +50,28 @@ while running:
         ball_speed_y = -ball_speed_y
     if ball.colliderect(paddle1) or ball.colliderect(paddle2):
         ball_speed_x = -ball_speed_x
-        score += 1
+        score += 1 # Update Score
 
-    # Check for Scores
+    # Check for game over
     if ball.left <= 0 or ball.right >= screen_width:
-        score -= 1
-        ball.x = screen_width // 2 - ball_radius
-        ball.y = screen_height // 2 - ball_radius
-        # screen.ne
-        # game_over = font.render(str("Game Over"), True, white)
-        # screen.blit(game_over, (screen_width // 2, screen_height // 2))
+        font = pygame.font.Font(None, 35)
+        game_over = font.render(str("Game Over"), True, white)
+        disp_score = font.render(str("Your Score : ") + str(score), True, white)
+        screen.blit(game_over, (screen_width // 2, screen_height // 2))
+        screen.blit(disp_score, (screen_width // 2, screen_height // 2 + 40))
+        pygame.display.update()
+        
+    else:
+        # Draw Objects
+        screen.fill(bg_color)
+        pygame.draw.rect(screen, white, paddle1)
+        pygame.draw.rect(screen, white, paddle2)
+        pygame.draw.circle(screen, white, ball.center, ball_radius)
 
-    # Draw Objects
-    screen.fill(color)
-    pygame.draw.rect(screen, white, paddle1)
-    pygame.draw.rect(screen, white, paddle2)
-    pygame.draw.circle(screen, white, ball.center, ball_radius)
-
-    # Draw Score
-    font = pygame.font.Font(None, 36)
-    text1 = font.render(str("Score: ") + str(score), True, white)
-    screen.blit(text1, (screen_width // 4 , 20))
-    pygame.display.update()
+        # Draw Score
+        font = pygame.font.Font(None, 36)
+        text1 = font.render(str("Score: ") + str(score), True, white)
+        screen.blit(text1, (screen_width // 4 , 20))
+        pygame.display.update()
 
 pygame.quit()

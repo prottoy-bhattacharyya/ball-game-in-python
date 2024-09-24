@@ -17,6 +17,8 @@ paddle_width = 10
 paddle_height = 200
 ball_radius = 10
 paddle_speed = 5
+high_score = 0
+
 
 paddle1 = pygame.Rect(0, screen_height // 2 - paddle_height // 2, paddle_width, paddle_height)
 paddle2 = pygame.Rect(screen_width - paddle_width, screen_height // 2 - paddle_height // 2, paddle_width, paddle_height)
@@ -28,6 +30,8 @@ def game():
     ball_speed_x = 1
     ball_speed_y = 1
     score = 0
+    global high_score
+    
 
     running = True
     while running:
@@ -35,7 +39,10 @@ def game():
             if event.type == pygame.QUIT:
                 running = False
 
-        # Player Movement
+        if score > high_score:
+            high_score = score
+        
+        # Paddle Movement
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_UP] or keys[pygame.K_w]) and paddle1.top >= 0:
             paddle1.y -= paddle_speed
@@ -80,7 +87,9 @@ def game():
             # Draw Score
             font = pygame.font.Font(None, 36)
             text1 = font.render(str("Score: ") + str(score), True, white)
+            text2 = font.render(str("High Score: ") + str(high_score), True, white)
             screen.blit(text1, (screen_width // 4 , 20))
+            screen.blit(text2, (screen_width // 4 * 3, 20))
             pygame.display.update()
 
 game()
